@@ -28,6 +28,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E93DE6872C0D0DBE003439DC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E93DE6882C0D0DBE003439DC /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		E93DE6892C0D0DBE003439DC /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E955E5C42C03D1F50008A20B /* prologix_emulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = prologix_emulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		E955E5C72C03D1F50008A20B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E955E5CE2C03D2D90008A20B /* TCPSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TCPSession.cpp; path = prologix_emulator/TCPSession.cpp; sourceTree = "<group>"; };
@@ -57,6 +60,9 @@
 		E955E5BB2C03D1F50008A20B = {
 			isa = PBXGroup;
 			children = (
+				E93DE6882C0D0DBE003439DC /* images */,
+				E93DE6892C0D0DBE003439DC /* LICENSE */,
+				E93DE6872C0D0DBE003439DC /* README.md */,
 				E955E5D02C03D2D90008A20B /* command.cpp */,
 				E955E5D22C03D2D90008A20B /* command.hpp */,
 				E955E5D12C03D2D90008A20B /* functions.cpp */,
