@@ -25,6 +25,7 @@ It's currently a bit bare bones, all i've done so far are:
 
 ### To Do:
 - Lots of stuff, update later.
+- Dynamically display connected clients
 
 ### Requirements
 The compiled program needs nothing but to just be run, if you plan to compile it from scratch, you'll need:

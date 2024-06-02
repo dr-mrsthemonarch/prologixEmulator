@@ -77,16 +77,16 @@ std::string udp_server(boost::asio::io_context& io_context,
 std::string tcp_control(boost::asio::io_context& io_context,
                         std::unique_ptr<std::thread>& io_thread,
                         std::unique_ptr<TCPServer>& server,
-                        const std::string& command,
+                        const std::string& command,Command& cmd,
                         SharedVector& sharedVec,
-                        Command& cmd) {
+                        SharedVector& clientVec) {
     std::string returner;
     
     if (command == "start") {
         if (!joker.load()) {
             joker.store(true);
             // Create a new TCP server instance and run it in a separate thread
-            server = std::make_unique<TCPServer>(io_context, 1234, cmd, sharedVec);
+            server = std::make_unique<TCPServer>(io_context, 1234, cmd, sharedVec,clientVec);
             
             io_thread = std::make_unique<std::thread>([&io_context]() {
                 io_context.run();
@@ -130,6 +130,7 @@ int main() {
     auto screen = ScreenInteractive::Fullscreen();
     //things needed to start and stop the UDPServer
     SharedVector sharedVec;
+    SharedVector clientVec;
     boost::asio::io_context udpcontext;
     boost::asio::io_context tcpcontext;
     boost::asio::io_service io_service;
@@ -162,17 +163,17 @@ int main() {
     };
     auto tcpStart = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"start",sharedVec,cmd));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"start",cmd,sharedVec,clientVec));
     };
     
     auto tcpStop = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"stop",sharedVec,cmd));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"stop",cmd,sharedVec,clientVec));
     };
     auto Exit = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
         sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver,"exit",sharedVec));
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"exit",sharedVec,cmd));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"exit",cmd,sharedVec,clientVec));
         running = false;
         screen.Exit();
     };
