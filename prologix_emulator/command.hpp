@@ -1,31 +1,9 @@
-////
-////  command.hpp
-////  supersimple
-////
-////  Created by Kyle on 28.04.24.
-////
 //
-//#ifndef command_hpp
-//#define command_hpp
+//  command.hpp
 //
 //
-//#include <boost/asio.hpp>
-//#include <memory>
-//#include <unordered_map>
+//  Created by drMrstheMonarch on 28.04.24.
 //
-//class Command
-//{
-//private:
-//    std::unordered_map<std::string, std::string> commands_;
-//public:
-//    Command() {};
-//    void addCommand(const std::string& cmd, const std::string& response);
-//    std::string getResponse(const std::string& cmd);
-//};
-//
-//
-//#endif /* command_hpp */
-
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 

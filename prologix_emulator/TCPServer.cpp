@@ -1,34 +1,11 @@
-////
-////  TCPServer.cpp
-////  supersimple
-////
-////  Created by Kyle on 28.04.24.
-////
 //
-//#include "TCPServer.hpp"
-//#include "functions.hpp"
-////Server class to start the server.
+//  TCPServer.cpp
+//  
 //
+//  Created by drMrstheMonarch on 28.04.24.
 //
-//    TCPServer::TCPServer(io_service& service, short port, Command& cmd)
-//        : acceptor_(service, ip::tcp::endpoint(ip::tcp::v4(), port)),
-//          socket_(service),
-//          command_(cmd) {
-//        accept();
-//    }
-//
-//
-//    void TCPServer::accept() {
-//        acceptor_.async_accept(socket_,
-//            [this](boost::system::error_code ec) {
-//                if (!ec) {
-//                    std::cout << "Connection established." << std::endl;
-//                    std::make_shared<TCPSession>(std::move(socket_), command_)->start(); // Start a new session
-//                }
-//                accept(); // Accept new connections
-//            });
-//    }
-//
+
+
 
 #include "TCPServer.hpp"
 #include "functions.hpp"
@@ -42,11 +19,29 @@ TCPServer::TCPServer(io_service& service, short port, Command& cmd, SharedVector
     accept();
 }
 
+//void TCPServer::accept() {
+//    acceptor_.async_accept(socket_,
+//        [this](boost::system::error_code ec) {
+//            if (!ec) {
+//                //std::cout << "Connection established." << std::endl;
+//                {
+//                    std::lock_guard<std::mutex> lock(sharedVec_.vecMutex);
+//                    sharedVec_.vec.push_back("Connection established." );
+//                }
+//                std::make_shared<TCPSession>(std::move(socket_), command_, sharedVec_)->start(); // Pass SharedVector
+//            }
+//            accept(); // Accept new connections
+//        });
+//}
 void TCPServer::accept() {
     acceptor_.async_accept(socket_,
         [this](boost::system::error_code ec) {
             if (!ec) {
-                std::cout << "Connection established." << std::endl;
+                std::string remote_ip = socket_.remote_endpoint().address().to_string();
+                {
+                    std::lock_guard<std::mutex> lock(sharedVec_.vecMutex);
+                    sharedVec_.vec.push_back("Connection established from " + remote_ip + ".");
+                }
                 std::make_shared<TCPSession>(std::move(socket_), command_, sharedVec_)->start(); // Pass SharedVector
             }
             accept(); // Accept new connections

@@ -1,33 +1,9 @@
-////
-////  TCPServer.hpp
-////  supersimple
-////
-////  Created by Kyle on 28.04.24.
-////
 //
-//#ifndef TCPServer_hpp
-//#define TCPServer_hpp
-
-//#include <boost/asio.hpp>
-//#include <vector>
-//#include "command.hpp"
-//#include "TCPSession.hpp"
-//#include "functions.hpp"
+//  TCPServer.hpp
 //
 //
-//class TCPServer
-//{
-//public:
-//    TCPServer(io_service& service, short port, Command& cmd);
-//private:
-//    void accept();
-//    ip::tcp::acceptor acceptor_;
-//    ip::tcp::socket socket_;
-//    Command& command_;
-//};
+//  Created by drMrstheMonarch on 28.04.24.
 //
-//
-//#endif /* TCPServer_hpp */#ifndef TCPServer_hpp
 #ifndef TCPServer_hpp
 #define TCPServer_hpp
 

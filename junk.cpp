@@ -786,3 +786,64 @@ int main(int argc, char* argv[]) {
 #endif
     return 0;
 }
+
+#include "TCPSession.hpp"
+
+TCPSession::TCPSession(ip::tcp::socket socket, Command& cmd, SharedVector& sharedVec)
+    : socket_(std::move(socket)), command_(cmd), sharedVec_(sharedVec), timer_(socket_.get_executor()) {}
+
+void TCPSession::start() {
+    read();
+    check_connection();  // Start periodic connection checks
+}
+
+void TCPSession::read() {
+    auto self(shared_from_this());
+    socket_.async_read_some(boost::asio::buffer(data_),
+        [this, self](boost::system::error_code ec, std::size_t length) {
+            if (!ec) {
+                std::string received(data_.data(), length);
+                std::string response = command_.getResponse(received);
+                {
+                    std::lock_guard<std::mutex> lock(sharedVec_.vecMutex);
+                    sharedVec_.vec.push_back("Received: " + received);
+                }
+                
+                write(response);
+            }
+        });
+}
+
+void TCPSession::write(const std::string& response) {
+    auto self(shared_from_this());
+    boost::asio::async_write(socket_, boost::asio::buffer(response),
+        [this, self, response](boost::system::error_code ec, std::size_t /*length*/) {
+            if (!ec) {
+                {
+                    std::lock_guard<std::mutex> lock(sharedVec_.vecMutex);
+                    sharedVec_.vec.push_back("Sent: " + response);
+                }
+                
+                read(); // Continue reading from the client
+            }
+        });
+}
+
+void TCPSession::check_connection() {
+    auto self(shared_from_this());
+    timer_.expires_after(std::chrono::seconds(5));  // Check every 5 seconds
+    timer_.async_wait([this, self](boost::system::error_code ec) {
+        if (!ec) {
+            // Use the socket's lowest layer to check if it's open
+            if (socket_.is_open()) {
+                // Schedule the next check
+                check_connection();
+            } else {
+                std::string remote_ip = socket_.remote_endpoint().address().to_string();
+                std::lock_guard<std::mutex> lock(sharedVec_.vecMutex);
+                sharedVec_.vec.push_back(remote_ip + " disconnected.");
+                std::cout << remote_ip + " disconnected." << std::endl;
+            }
+        }
+    });
+}

@@ -1,8 +1,8 @@
 //
 //  functions.hpp
-//  supersimple
 //
-//  Created by Kyle on 26.05.24.
+//
+//  Created by drMrstheMonarch on 28.04.24.
 //
 
 #ifndef functions_hpp

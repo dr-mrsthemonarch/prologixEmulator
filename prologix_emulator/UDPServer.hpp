@@ -1,9 +1,10 @@
 //
 //  UDPServer.hpp
-//  supersimple
 //
-//  Created by Kyle on 05.05.24.
 //
+//  Created by drMrstheMonarch on 28.04.24.
+//
+
 
 #ifndef UDPServer_hpp
 #define UDPServer_hpp

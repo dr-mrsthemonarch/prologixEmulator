@@ -1,34 +1,9 @@
-////
-////  command.cpp
-////  supersimple
-////
-////  Created by Kyle on 28.04.24.
-////
 //
-//#include "command.hpp"
-////Command class to easily create commands for prologix command reponses.
-///* Todo:
-// add functionality for vset to store set values
-// add function for vout that outputs stored value
-// actually just re-read prologix documentation and implement each feature.
+//  command.cpp
+//  
 //
-//*/
-//    void Command::addCommand(const std::string& cmd, const std::string& response) {
-//        commands_[cmd] = response;
-//    }
+//  Created by drMrstheMonarch on 28.04.24.
 //
-//    std::string Command::getResponse(const std::string& cmd) {
-//        auto it = commands_.find(cmd);
-//        if (it != commands_.end()) {
-//            return it->second;
-//        } else {
-//            return "Unknown command";
-//        }
-//    }
-//
-//    std::unordered_map<std::string, std::string> commands_;
-//
-
 #include "Command.hpp"
 #include "functions.hpp"
 

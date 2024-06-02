@@ -1,3 +1,9 @@
+//
+//  UDPServer.cpp
+//
+//
+//  Created by drMrstheMonarch on 28.04.24.
+//
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
@@ -20,12 +26,7 @@ UDPServer::UDPServer(boost::asio::io_context& io_context, short port,SharedVecto
 : socket_(io_context, udp::endpoint(udp::v4(), port)) {
     start_receive(sharedVec);
 }
-/*
-void UDPServer::start_receive(SharedVector& sharedVec) {
-    socket_.async_receive_from(boost::asio::buffer(recv_buffer_),
-                               remote_endpoint_,boost::bind(&UDPServer::handle_receive, this,boost::asio::placeholders::error,boost::asio::placeholders::bytes_transferred),sharedVec);
-}
-*/
+
 void UDPServer::start_receive(SharedVector& sharedVec) {
     socket_.async_receive_from(boost::asio::buffer(recv_buffer_),
                                remote_endpoint_,boost::bind(&UDPServer::handle_receive, this,boost::asio::placeholders::error,boost::asio::placeholders::bytes_transferred,boost::ref(sharedVec)));
@@ -82,7 +83,6 @@ void UDPServer::handle_receive(const boost::system::error_code& error, std::size
         std::stringstream ss;
         ss <<"Received identify from " << &hostname << "/" << &port;
         sharedVec.vec.push_back(ss.str());
-        //std::thread monitorThread(monitorVector, std::ref(udp_entries.vec));
         // Start receiving again
         start_receive(sharedVec);
     }
