@@ -24,8 +24,35 @@ It's currently a bit bare bones, all i've done so far are:
 - A Commander, This is just a simple class so far and more or less completely under the hood, but eventually it'll be all implemented firmware functions, just like the real thing.
 
 ### To Do:
-- Lots of stuff, update later.
 - Dynamically display connected clients
+
+#### Firmware to implement
+ - Most ++commands
+    - addr 8
+    - auto 8
+    - clr
+    - eoi
+    - eos 10
+    - eot_enable
+    - eot_char
+    - ifc
+    - llo
+    - loc
+    - lon 
+    - mode
+    - read
+    - read_tmo_ms
+    - rst
+    - savecfg
+    - spoll
+    - srq
+    - status
+    - trg
+    - ver
+    - help
+ - change static and dynamic ips via Netfinder
+ - 
+
 
 ### Requirements
 The compiled program needs nothing but to just be run, if you plan to compile it from scratch, you'll need:
