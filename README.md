@@ -28,7 +28,6 @@ It's currently a bit bare bones, all i've done so far are:
 - Add localhost client to cli input for testing the server and commands and expected responses within the server itself.
 - change static and dynamic ips via Netfinder
 - Fix the Discovery packet structure to properly display uptime, actual mac address and some other things.
-- Fix a random segmentation fault error from turning the TCPServer on and off too quickly/often.
 - Add a "devices" dropdown menu for various emulated GPIB devices.
     - Stanford PSU 350/1
 
