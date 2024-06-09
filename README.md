@@ -59,16 +59,21 @@ It's currently a bit bare bones, all i've done so far are:
  
 
 
-### Requirements
+### Build and Requirements
 To build the program yourself, you can use cmake and the provided CMakelist.txt to compile the program, it will automatically fetch all of the required libraries to build yourself. I haven't tried on any other OS besides macOS, but in theory everything will work fine.
 
 - std=c++20 compatible compiler, like modern clang or gcc
 - Boost with asio
 - ftxui
+
 Download the source code, 
+
 ```
 mkdir build && cd build
 cmake ..
 make -j8 (or less depending on how many cores you have)
 ./prologix_emulator
+
 ```
+
+I would suggest deleting the boost source file, since it's around 2gb, but I don't know another way to automagically fetch and build boost and keep the file sizes small.
