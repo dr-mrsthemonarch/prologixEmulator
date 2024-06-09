@@ -33,28 +33,29 @@ It's currently a bit bare bones, all i've done so far are:
 
 #### Firmware to implement
  - Most ++commands
-    - addr 8
-    - auto 8
     - clr
-    - eoi
-    - eos 10
-    - eot_enable
-    - eot_char
-    - ifc
-    - llo
-    - loc
-    - lon 
-    - mode
     - read
-    - read_tmo_ms
     - rst
     - savecfg
     - spoll
-    - srq
     - status
-    - trg
-    - ver
+    - trg    
     - help
+    - ~~addr~~ 
+    - ~~auto~~
+    - ~~eoi~~
+    - ~~eos~~
+    - ~~eot_enable~~
+    - ~~eot_char~~
+    - ~~ifc~~
+    - ~~llo~~
+    - ~~loc~~
+    - ~~lon ~~
+    - ~~mode~~
+    - ~~read_tmo_ms~~
+    - ~~srq~~
+    - ~~ver~~
+
  
 
 

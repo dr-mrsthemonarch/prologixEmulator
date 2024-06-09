@@ -150,7 +150,18 @@ int main() {
     commander.addCommand("++reset","",0);
     commander.addCommand("++ver", "1.3.4", 0);
     commander.addCommand("++mode", "0", 1);
-    
+    commander.addCommand("++auto", "0", 1);
+    commander.addCommand("++eoi", "0", 1);
+    commander.addCommand("++eos", "0", 1);
+    commander.addCommand("++eot_enable", "0", 1);
+    commander.addCommand("++eot_char", "0", 1);
+    commander.addCommand("++ifc", "Conntroller in Charge", 0);
+    commander.addCommand("++llo", "Display Off", 0);
+    commander.addCommand("++loc", "Display On", 0);
+    commander.addCommand("++lon", "0", 1);
+    commander.addCommand("++read_tmo_ms", "1", 1);
+    commander.addCommand("++srq", "0", 1);
+    commander.addCommand("++status", "0", 1);
     // ----------------------------------------------------------------------
     auto udpStart = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
