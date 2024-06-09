@@ -60,9 +60,15 @@ It's currently a bit bare bones, all i've done so far are:
 
 
 ### Requirements
-Due to my poor abilities of programming, and I don't know how to compile for multiple OS versions, I suggest compiling the source code yourself. With that said, I tried my best to use libraries and code that is cross compatible. 
-You'll need:
+To build the program yourself, you can use cmake and the provided CMakelist.txt to compile the program, it will automatically fetch all of the required libraries to build yourself. I haven't tried on any other OS besides macOS, but in theory everything will work fine.
 
 - std=c++20 compatible compiler, like modern clang or gcc
 - Boost with asio
 - ftxui
+Download the source code, 
+```
+mkdir build && cd build
+cmake ..
+make -j8 (or less depending on how many cores you have)
+./prologix_emulator
+```

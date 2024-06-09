@@ -54,7 +54,7 @@ std::string joinStringsAccumulate(std::vector<std::string>&& strings);
 std::string joinStringsStream(const std::vector<std::string>& strings);
 std::string joinStringsStream(std::vector<std::string>&& strings) ;
 
-void checkForNewEntry(SharedVector& sharedVec, size_t& lastSize,ftxui::Elements children);
+void checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,ftxui::Elements children);
 
 void monitorVector(SharedVector& sharedVec,ftxui::Elements children);
 

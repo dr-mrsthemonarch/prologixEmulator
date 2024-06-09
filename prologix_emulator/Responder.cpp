@@ -33,7 +33,7 @@ std::string Responder::getResponse(Commander& commander, const std::string& comm
     } else if ( (*commandData)[2].empty() ) {
         response = (*commandData)[0];
     } else {
-        for (size_t i = 2; i < commandData->size(); ++i) {
+        for (unsigned long i = 2; i < commandData->size(); ++i) {
             response += " " + (*commandData)[i];
         }
     }

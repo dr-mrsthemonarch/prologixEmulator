@@ -274,7 +274,7 @@ std::vector<boost::asio::ip::address> get_local_interfaces() {
 #endif
 
 // Function to check if the vector has a new entry
-void checkForNewEntry(SharedVector& sharedVec, size_t& lastSize,Elements children) {
+void checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,Elements children) {
     std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
     if (sharedVec.vec.size() > lastSize) {
         lastSize = sharedVec.vec.size();
