@@ -14,7 +14,9 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-#include "command.hpp"
+#include "Commander.hpp"
+#include "Parser.hpp"
+#include "Responder.hpp"
 #include "functions.hpp" // Include for SharedVector
 
 using namespace boost::asio;
@@ -22,7 +24,7 @@ using namespace boost::asio;
 class TCPSession : public std::enable_shared_from_this<TCPSession>
 {
 public:
-    TCPSession(ip::tcp::socket socket, Command& cmd, SharedVector& sharedVec,SharedVector& clientVec);
+    TCPSession(ip::tcp::socket socket, Commander& cmd, SharedVector& sharedVec,SharedVector& clientVec);
     ~TCPSession();
 
     void start();
@@ -35,7 +37,7 @@ private:
     void remove_connected_ip();
 
     ip::tcp::socket socket_;
-    Command& command_;
+    Commander& command_;
     SharedVector& sharedVec_;
     SharedVector& clientVec_;
     std::array<char, 1024> data_;

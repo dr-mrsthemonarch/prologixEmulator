@@ -20,8 +20,8 @@ Component Wrap(std::string name, Component component) {
     return Renderer(component, [name, component] {
         return hbox({
             text(name) | size(WIDTH, EQUAL, 15),
-            separator() | color(Color::Default),
-            component->Render() | xflex,
+            separator() |  color(Color::Default),
+            component->Render() | xflex ,
         });
     });
 }
@@ -327,5 +327,18 @@ std::string removeWhitespaces(std::string& input) {
     // Return the modified string
     return input;
 }
+
+//Component DynalicListComponent(std::vector<std::string> &dynamic_data) {
+//  return Renderer([&] {
+//    std::vector<Element> interactive_components;
+//    for (auto &data : dynamic_data)
+//      interactive_components.emplace_back(InteractiveComponent(data)->Render());
+//
+//    return vbox(interactive_components)
+//      | yframe
+//      | border;
+//  });
+//}
+
 
 //==============================================================================================================================

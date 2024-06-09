@@ -34,7 +34,7 @@
 //        });
 //}
 // Server class to start the server.
-TCPServer::TCPServer(boost::asio::io_service& service, short port, Command& cmd, SharedVector& sharedVec, SharedVector& clientVec)
+TCPServer::TCPServer(boost::asio::io_service& service, short port, Commander& cmd, SharedVector& sharedVec, SharedVector& clientVec)
     : acceptor_(service, ip::tcp::endpoint(ip::tcp::v4(), port)),
       socket_(service),
       command_(cmd),

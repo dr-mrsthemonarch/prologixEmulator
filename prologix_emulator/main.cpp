@@ -15,7 +15,9 @@
 #include "UDPServer.hpp"
 #include "functions.hpp"
 #include "TCPServer.hpp"
-#include "command.hpp"
+#include "Commander.hpp"
+#include "Parser.hpp"
+#include "Responder.hpp"
 
 using boost::asio::ip::udp;
 using namespace ftxui;
@@ -77,7 +79,7 @@ std::string udp_server(boost::asio::io_context& io_context,
 std::string tcp_control(boost::asio::io_context& io_context,
                         std::unique_ptr<std::thread>& io_thread,
                         std::unique_ptr<TCPServer>& server,
-                        const std::string& command,Command& cmd,
+                        const std::string& command,Commander& cmd,
                         SharedVector& sharedVec,
                         SharedVector& clientVec) {
     std::string returner;
@@ -141,15 +143,13 @@ int main() {
     std::unique_ptr<std::thread> udpthread;
     std::unique_ptr<std::thread> tcpthread;
     std::vector<std::string> cli_entries;
-    Command cmd(sharedVec);
+    Commander commander(sharedVec);
     
     // Add commands and their responses
-    cmd.addCommand("hello", "Hi there!");
-    cmd.addCommand("status", "Server is up and running.");
-    cmd.addCommand("++ver", "Prologix v0.1\n");
-    cmd.addCommand("++mode", "1\n");
-    cmd.addCommand("++auto", "1\n");
-    cmd.addCommand("*idn?", "I am a emulator\n");
+    commander.addCommand("++addr", "14", 2);
+    commander.addCommand("++reset","",0);
+    commander.addCommand("++ver", "1.3.4", 0);
+    commander.addCommand("++mode", "0", 1);
     
     // ----------------------------------------------------------------------
     auto udpStart = [&] {
@@ -163,17 +163,17 @@ int main() {
     };
     auto tcpStart = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"start",cmd,sharedVec,clientVec));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"start",commander,sharedVec,clientVec));
     };
     
     auto tcpStop = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"stop",cmd,sharedVec,clientVec));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"stop",commander,sharedVec,clientVec));
     };
     auto Exit = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
         sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver,"exit",sharedVec));
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"exit",cmd,sharedVec,clientVec));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"exit",commander,sharedVec,clientVec));
         running = false;
         screen.Exit();
     };
@@ -183,14 +183,16 @@ int main() {
     std::array<bool, 10> states;
     
     auto checkboxes = Container::Vertical({});
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < clientVec.vec.size(); ++i) {
         states[i] = false;
-        checkboxes->Add(Checkbox("Client" + std::to_string(i), &states[i]) );
+        checkboxes->Add(Checkbox(clientVec.vec[i],
+                                 &states[i]) );
     }
     Component checkframe = Renderer(checkboxes, [&] {
         return checkboxes->Render() | vscroll_indicator | frame |
         size(HEIGHT, LESS_THAN, 5) | border | color(Color::Default);
     });
+
     checkframe=Wrap("To be Done",checkframe);
 
     
@@ -218,15 +220,14 @@ int main() {
     
     auto cliArea = Renderer(cli_add,[&] {
         return window(text("cli input"),vbox(cli_add->Render())) | color(Color::Purple4);
-    }
-                            ) | size(HEIGHT, EQUAL, 1);
+    }) | size(HEIGHT, EQUAL, 1);
     
     // -- UDP Buttons -----------------------------------------------------------------
     
     auto udpbuttons = Container::Horizontal({
         Button("Start", udpStart) | center | color(Color::Green), // turn udp on
         Button("Stop", udpStop) | center | color(Color::Red), // turn udp off
-    })| size(HEIGHT, EQUAL, 3);
+    }) | size(HEIGHT, EQUAL, 3);
     udpbuttons = Wrap("UDP Discovery",udpbuttons);
     // -- TCP Buttons -----------------------------------------------------------------
     
@@ -234,7 +235,7 @@ int main() {
         Button("Start", tcpStart) | center | color(Color::Green), // turn udp on
         Button("Stop", tcpStop) | center | color(Color::Red), // turn udp off
         Button("Exit", Exit) | center | color(Color::DarkRed),
-    })| size(HEIGHT, EQUAL, 3);
+    }) | size(HEIGHT, EQUAL, 5) ;
     tcpbuttons = Wrap("TCP Server",tcpbuttons);
     
     // -- Output -----------------------------------------------------------------
@@ -244,7 +245,7 @@ int main() {
             text("Server status, connections and outputs are printed here."),
             separator() | color(Color::Yellow),
         };
-        for (size_t i = std::max(0, (int)sharedVec.vec.size() - 12); i < sharedVec.vec.size(); ++i) {
+        for (size_t i = std::max(0, (int)sharedVec.vec.size() - 11); i < sharedVec.vec.size(); ++i) {
             std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
             children.push_back(text(sharedVec.vec[i]));
         }
@@ -255,11 +256,10 @@ int main() {
     // -- Layout -----------------------------------------------------------------
     auto layout = Container::Vertical({
         checkframe,
-        //        toggle,
         input_add,
         udpbuttons,
         tcpbuttons
-    }) | size(HEIGHT, GREATER_THAN, 40);
+    }) | size(HEIGHT, EQUAL, 43);
     
     auto component = Renderer(layout, [&] {
         return vbox({
@@ -274,11 +274,11 @@ int main() {
     
     auto topwindows = Container::Horizontal({
         component,
-        output | yflex,
+        output | size(HEIGHT, EQUAL, 15) | yflex,
     });
     
     auto layoutmain = Container::Vertical({
-        topwindows,
+        topwindows ,
         cliArea | flex,
     });
     

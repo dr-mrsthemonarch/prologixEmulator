@@ -9,7 +9,7 @@
 
 #include <boost/asio.hpp>
 #include <vector>
-#include "command.hpp"
+#include "Commander.hpp"
 #include "TCPSession.hpp"
 #include "functions.hpp"
 #include <memory>
@@ -19,7 +19,7 @@ class TCPServer
 {
 public:
 //        TCPServer(io_service& service, short port, Command& cmd, SharedVector& sharedVec);
-    TCPServer(boost::asio::io_service& service, short port, Command& cmd, SharedVector& sharedVec, SharedVector& clientVec);
+    TCPServer(boost::asio::io_service& service, short port, Commander& cmd, SharedVector& sharedVec, SharedVector& clientVec);
 //    TCPServer(boost::asio::io_service& service, short port, Command& cmd, SharedVector& sharedVec);
     
 private:
@@ -29,7 +29,7 @@ private:
     SharedVector& clientVec_;
     std::atomic<int> activeSessions_; // Counter for active sessions
     boost::asio::ip::tcp::acceptor acceptor_;
-    Command& command_;
+    Commander& command_;
 };
 
 
