@@ -50,7 +50,7 @@ It's currently a bit bare bones, all i've done so far are:
     - ~~ifc~~
     - ~~llo~~
     - ~~loc~~
-    - ~~lon ~~
+    - ~~lon~~
     - ~~mode~~
     - ~~read_tmo_ms~~
     - ~~srq~~

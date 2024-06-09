@@ -13,8 +13,7 @@
 #include <memory>
 #include <unordered_map>
 #include <mutex>
-#include "functions.hpp"
-
+#include "Functions.hpp"
 
 
 class Commander {
@@ -25,7 +24,7 @@ public:
         std::vector<std::string> params;
     };
     Commander(SharedVector& sharedVec) : sharedVec_(sharedVec) {}
-
+    
     void addCommand(const std::string& name, const std::string& defaultResponse, int numParams);
     
     const std::vector<std::string>* getCommand(const std::string& name) const;
@@ -34,7 +33,7 @@ public:
     
     void resetAllCommandsToDefault();
     
-
+    
 private:
     SharedVector& sharedVec_;
     std::unordered_map<std::string, std::vector<std::string>> commands_;

@@ -9,18 +9,18 @@
 
 #include <boost/asio.hpp>
 #include <vector>
-#include "Commander.hpp"
-#include "TCPSession.hpp"
-#include "functions.hpp"
 #include <memory>
 #include <atomic>
+#include "Commander.hpp"
+#include "TCPSession.hpp"
+#include "Functions.hpp"
+
 
 class TCPServer
 {
 public:
-//        TCPServer(io_service& service, short port, Command& cmd, SharedVector& sharedVec);
+    
     TCPServer(boost::asio::io_service& service, short port, Commander& cmd, SharedVector& sharedVec, SharedVector& clientVec);
-//    TCPServer(boost::asio::io_service& service, short port, Command& cmd, SharedVector& sharedVec);
     
 private:
     void accept();
@@ -32,8 +32,4 @@ private:
     Commander& command_;
 };
 
-
-
-
 #endif /* TCPServer_hpp */
-

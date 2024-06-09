@@ -8,8 +8,9 @@
 #ifndef Responder_hpp
 #define Responder_hpp
 
-#include "functions.hpp"
+#include "Functions.hpp"
 #include "Commander.hpp"
+
 
 class Responder {
 public:

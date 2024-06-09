@@ -5,7 +5,6 @@
 //  Created by drMrstheMonarch on 28.04.24.
 //
 #include "Commander.hpp"
-#include "functions.hpp"
 
 
 void Commander::addCommand(const std::string& name, const std::string& defaultResponse, int numParams) {
@@ -44,4 +43,3 @@ void Commander::resetAllCommandsToDefault() {
             std::fill(command.second.begin() + 2, command.second.end(), std::string(""));
         }
     }
-

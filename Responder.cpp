@@ -6,8 +6,6 @@
 //
 
 #include "Responder.hpp"
-#include "functions.hpp"
-
 
 
 std::string Responder::getResponse(Commander& commander, const std::string& commandName, const std::vector<std::string>& params) {
@@ -39,7 +37,6 @@ std::string Responder::getResponse(Commander& commander, const std::string& comm
             response += " " + (*commandData)[i];
         }
     }
-    
     
     return response;
 };

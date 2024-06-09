@@ -5,7 +5,7 @@
 //  Created by drMrstheMonarch on 28.04.24.
 //
 
-#include "functions.hpp"
+#include "Functions.hpp"
 #include "UDPServer.hpp"
 #include <string>
 #include <vector>
@@ -327,18 +327,5 @@ std::string removeWhitespaces(std::string& input) {
     // Return the modified string
     return input;
 }
-
-//Component DynalicListComponent(std::vector<std::string> &dynamic_data) {
-//  return Renderer([&] {
-//    std::vector<Element> interactive_components;
-//    for (auto &data : dynamic_data)
-//      interactive_components.emplace_back(InteractiveComponent(data)->Render());
-//
-//    return vbox(interactive_components)
-//      | yframe
-//      | border;
-//  });
-//}
-
 
 //==============================================================================================================================

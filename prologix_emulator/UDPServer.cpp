@@ -7,19 +7,20 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+#include <sstream>
+#include <iomanip>
+#include <vector>
+#include <array>
+#include <string>
+#include "UDPServer.hpp"
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
-#include <sstream>
-#include <iomanip>
-#include <vector>
-#include <array>
-#include <string>
-#include "functions.hpp"
-#include "UDPServer.hpp"
+
+
 using boost::asio::ip::udp;
 
 UDPServer::UDPServer(boost::asio::io_context& io_context, short port,SharedVector& sharedVec)
@@ -43,7 +44,6 @@ void UDPServer::handle_receive(const boost::system::error_code& error, std::size
     if (!error || error == boost::asio::error::message_size) {
         std::string hostname = remote_endpoint_.address().to_string();
         unsigned short port = remote_endpoint_.port();
-        //std::cout << "Received identify from " << hostname << "/" << port << std::endl;
         
         uint16_t seq;
         std::memcpy(&seq, recv_buffer_.data() + 2, sizeof(seq));

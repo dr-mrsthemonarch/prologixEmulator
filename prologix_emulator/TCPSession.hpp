@@ -7,7 +7,7 @@
 #ifndef TCPSession_hpp
 #define TCPSession_hpp
 
-#include <stdio.h>
+
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
@@ -17,16 +17,17 @@
 #include "Commander.hpp"
 #include "Parser.hpp"
 #include "Responder.hpp"
-#include "functions.hpp" // Include for SharedVector
+#include "Functions.hpp" // Include for SharedVector
 
 using namespace boost::asio;
+
 
 class TCPSession : public std::enable_shared_from_this<TCPSession>
 {
 public:
     TCPSession(ip::tcp::socket socket, Commander& cmd, SharedVector& sharedVec,SharedVector& clientVec);
     ~TCPSession();
-
+    
     void start();
     
 private:
@@ -35,7 +36,7 @@ private:
     void check_connection();
     void add_connected_ip();
     void remove_connected_ip();
-
+    
     ip::tcp::socket socket_;
     Commander& command_;
     SharedVector& sharedVec_;

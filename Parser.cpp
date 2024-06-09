@@ -7,7 +7,6 @@
 
 #include "Parser.hpp"
 #include "Commander.hpp"
-#include "functions.hpp"
 
 
 bool Parser::parseCommand(const std::string& input, std::string& commandName, std::vector<std::string>& params) {

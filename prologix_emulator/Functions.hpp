@@ -1,14 +1,13 @@
 //
-//  functions.hpp
+//  Functions.hpp
 //
 //
 //  Created by drMrstheMonarch on 28.04.24.
 //
 
-#ifndef functions_hpp
-#define functions_hpp
+#ifndef Functions_hpp
+#define Functions_hpp
 
-#include <stdio.h>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 #include <sstream>
@@ -63,4 +62,4 @@ std::string cleanStringAndGetNumber(std::string& input, std::string& number);
 
 std::string removeWhitespaces(std::string& input);
 
-#endif /* functions_hpp */
+#endif /* Functions_hpp */

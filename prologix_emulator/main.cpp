@@ -1,9 +1,3 @@
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 #include <sstream>
@@ -13,11 +7,17 @@
 #include <array>
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 #include "UDPServer.hpp"
-#include "functions.hpp"
+#include "Functions.hpp"
 #include "TCPServer.hpp"
 #include "Commander.hpp"
 #include "Parser.hpp"
 #include "Responder.hpp"
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for InputOption
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 
 using boost::asio::ip::udp;
 using namespace ftxui;
@@ -61,17 +61,17 @@ std::string udp_server(boost::asio::io_context& io_context,
             returner = "Server is not running.";
         }
     }else if (command == "exit") {
-                if (batman.load()) {
-                    batman.store(false);
-                    io_context.stop();
-                    if (io_thread && io_thread->joinable()) {
-                        io_thread->join();
-                    }
-                    io_context.restart();
-                    server.reset();
-                }
-                returner = "Exiting...";
+        if (batman.load()) {
+            batman.store(false);
+            io_context.stop();
+            if (io_thread && io_thread->joinable()) {
+                io_thread->join();
             }
+            io_context.restart();
+            server.reset();
+        }
+        returner = "Exiting...";
+    }
     return returner;
 }
 
@@ -113,17 +113,17 @@ std::string tcp_control(boost::asio::io_context& io_context,
             returner = "TCP Server is not running.";
         }
     }else if (command == "exit") {
-                if (joker.load()) {
-                    joker.store(false);
-                    io_context.stop();
-                    if (io_thread && io_thread->joinable()) {
-                        io_thread->join();
-                    }
-                    io_context.restart();
-                    server.reset();
-                }
-                returner = "Exiting...";
+        if (joker.load()) {
+            joker.store(false);
+            io_context.stop();
+            if (io_thread && io_thread->joinable()) {
+                io_thread->join();
             }
+            io_context.restart();
+            server.reset();
+        }
+        returner = "Exiting...";
+    }
     
     return returner;
 }
@@ -203,9 +203,9 @@ int main() {
         return checkboxes->Render() | vscroll_indicator | frame |
         size(HEIGHT, LESS_THAN, 5) | border | color(Color::Default);
     });
-
+    
     checkframe=Wrap("To be Done",checkframe);
-
+    
     
     std::vector<std::string> input_entries;
     auto input_option = InputOption();
