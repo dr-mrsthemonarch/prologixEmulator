@@ -19,6 +19,10 @@ std::string Responder::getResponse(Commander& commander, const std::string& comm
         return "Unknown command";
     }
 
+    if (commandName == "VOUT?") {
+        commandData = commander.getCommand("VSET"); //temp solution until direct hardware is developed.
+    }
+
     int numParams = std::stoi((*commandData)[1]);
     if (params.size() <= numParams) {
         commander.setCommandParams(commandName, params); // Update parameters

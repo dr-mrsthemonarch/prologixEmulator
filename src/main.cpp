@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <array>
-
 #include "UDPServer.h"
 #include "Functions.h"
 #include "TCPServer.h"
@@ -139,7 +138,7 @@ int main() {
     std::vector<std::string> cli_entries;
     Commander commander(sharedVec);
 
-    // Add commands and their responses
+    // Add firmware commands and their responses
     commander.addCommand("++addr", "14", 2);
     commander.addCommand("++reset","",0);
     commander.addCommand("++ver", "1.3.4", 0);
@@ -156,6 +155,11 @@ int main() {
     commander.addCommand("++read_tmo_ms", "1", 1);
     commander.addCommand("++srq", "0", 1);
     commander.addCommand("++status", "0", 1);
+    //Add PSU350 Commands
+    commander.addCommand("HVON", "0",1);
+    commander.addCommand("HVOF", "0",1);
+    commander.addCommand("VOUT?","0",1);
+    commander.addCommand("VSET", "0", 1);
     // ----------------------------------------------------------------------
     auto udpStart = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
