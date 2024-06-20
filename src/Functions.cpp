@@ -194,7 +194,7 @@ std::array<unsigned char, 4> ipStringToByteArray(const std::string& ip) {
 
 
 //find local interface IP, returns a vector of ips
-#if defined(_WIN32)
+#if defined(_WIN64)
 #undef UNICODE
 #include <winsock2.h>
 // Headers that need to be included after winsock2.h:
@@ -273,40 +273,40 @@ std::vector<boost::asio::ip::address> get_local_interfaces() {
 #error "..."
 #endif
 
-// Function to check if the vector has a new entry
-std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,Elements children) {
-    std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-    if (sharedVec.vec.size() > lastSize) {
-        lastSize = sharedVec.vec.size();
-        return sharedVec.vec.back();
-        }
-    }
+// // Function to check if the vector has a new entry
+// std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,Elements children) {
+//     std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
+//     if (sharedVec.vec.size() > lastSize) {
+//         lastSize = sharedVec.vec.size();
+//         return sharedVec.vec.back();
+//         }
+//     }
+//
+// // Function to check if the vector has a new entry
+// std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize) {
+//     std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
+//     if (sharedVec.vec.size() > lastSize) {
+//         lastSize = sharedVec.vec.size();
+//         return sharedVec.vec.back();
+//     }
+// }
 
-// Function to check if the vector has a new entry
-std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize) {
-    std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-    if (sharedVec.vec.size() > lastSize) {
-        lastSize = sharedVec.vec.size();
-        return sharedVec.vec.back();
-    }
-}
-
-// Function to monitor the vector for new entries
-void monitorVector(SharedVector& sharedVec,Elements children) {
-    size_t lastSize = 0;
-    while (true) {
-        checkForNewEntry(sharedVec, lastSize,children);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Sleep for 100 ms before next check
-    }
-}
-// Function to monitor the vector for new entries
-void monitorVector(SharedVector& sharedVec) {
-    size_t lastSize = 0;
-    while (true) {
-        checkForNewEntry(sharedVec, lastSize);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Sleep for 100 ms before next check
-    }
-}
+// // Function to monitor the vector for new entries
+// void monitorVector(SharedVector& sharedVec,Elements children) {
+//     size_t lastSize = 0;
+//     while (true) {
+//         checkForNewEntry(sharedVec, lastSize,children);
+//         std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Sleep for 100 ms before next check
+//     }
+// }
+// // Function to monitor the vector for new entries
+// void monitorVector(SharedVector& sharedVec) {
+//     size_t lastSize = 0;
+//     while (true) {
+//         checkForNewEntry(sharedVec, lastSize);
+//         std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Sleep for 100 ms before next check
+//     }
+// }
 
 
 std::string cleanStringAndGetNumber(std::string& input, std::string& number) {

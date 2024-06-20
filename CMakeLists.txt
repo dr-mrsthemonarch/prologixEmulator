@@ -5,12 +5,22 @@ project(prologix_emulator LANGUAGES CXX VERSION 1.0.0)
 # Specify the C++ compiler based on platform
 if(NOT CMAKE_CXX_COMPILER)
     if(WIN32)
-        set(CMAKE_CXX_COMPILER "C:/msys64/minGW64/bin/g++.exe")  # Adjust path as per your MinGW installation
-        # Optionally, for clang through MinGW:
-        # set(CMAKE_CXX_COMPILER "C:/MinGW/bin/clang++.exe")
+        # For Windows, set appropriate compiler and platform
+        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+            # 64-bit Windows (assuming MinGW 64-bit)
+            set(CMAKE_CXX_COMPILER "C:/msys64/mingw64/bin/g++.exe")  # Adjust path as per your MinGW installation
+            # Set _WIN32_WINNT to target Windows 10
+            add_definitions(-D_WIN32_WINNT=0x0A00)
+
+        else()
+            # 32-bit Windows (adjust path as needed)
+            #set(CMAKE_CXX_COMPILER "C:/path/to/32bit/g++.exe")
+        endif()
     elseif(APPLE)
+        # For macOS
         set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
     elseif(UNIX)
+        # For Linux or other UNIX-like systems
         set(CMAKE_CXX_COMPILER "/usr/bin/g++")
     endif()
 endif()
@@ -18,7 +28,7 @@ endif()
 # Boost
 set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options asio date_time)
 set(BOOST_ENABLE_CMAKE ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../binary)
 include(FetchContent)
 
 FetchContent_Declare(
