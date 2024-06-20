@@ -1,3 +1,9 @@
+#ifdef _WIN64
+#include <SDKDDKVer.h>
+#define _WIN32_WINDOWS _WIN32_WINNT_WIN10
+#elif _WIN32
+#error "Build only supports x86-64 and does not support x86"
+#endif // _WIN64
 #include <boost/asio.hpp>
 #include <vector>
 #include <string>
