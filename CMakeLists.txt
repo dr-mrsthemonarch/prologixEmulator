@@ -2,10 +2,23 @@ cmake_minimum_required(VERSION 3.26)
 
 project(prologix_emulator LANGUAGES CXX VERSION 1.0.0)
 
+# Specify the C++ compiler based on platform
+if(NOT CMAKE_CXX_COMPILER)
+    if(WIN32)
+        set(CMAKE_CXX_COMPILER "C:/msys64/minGW64/bin/g++.exe")  # Adjust path as per your MinGW installation
+        # Optionally, for clang through MinGW:
+        # set(CMAKE_CXX_COMPILER "C:/MinGW/bin/clang++.exe")
+    elseif(APPLE)
+        set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+    elseif(UNIX)
+        set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+    endif()
+endif()
+
 # Boost
 set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options asio date_time)
 set(BOOST_ENABLE_CMAKE ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 include(FetchContent)
 
 FetchContent_Declare(
@@ -60,7 +73,6 @@ target_link_libraries(prologix_emulator
         PRIVATE ftxui::component
         PRIVATE ftxui::screen
         PRIVATE ftxui::dom
-
 )
 
 # Link Boost libraries
@@ -73,16 +85,16 @@ target_link_libraries(prologix_emulator
 )
 
 # Set C++ standard
-if (CMAKE_VERSION VERSION_GREATER 3.12)
+if(CMAKE_VERSION VERSION_GREATER 3.12)
     set_property(TARGET prologix_emulator PROPERTY CXX_STANDARD 20)
 endif()
 
 # Ensure Boost is properly found
-if (NOT TARGET Boost::asio OR NOT TARGET Boost::filesystem OR NOT TARGET Boost::thread OR NOT TARGET Boost::program_options)
+if(NOT TARGET Boost::asio OR NOT TARGET Boost::filesystem OR NOT TARGET Boost::thread OR NOT TARGET Boost::program_options)
     message(FATAL_ERROR "Required Boost libraries not found!")
 endif()
 
 # Ensure FTXUI is properly found
-if (NOT TARGET ftxui::screen OR NOT TARGET ftxui::dom)
+if(NOT TARGET ftxui::screen OR NOT TARGET ftxui::dom)
     message(FATAL_ERROR "FTXUI libraries not found!")
 endif()
