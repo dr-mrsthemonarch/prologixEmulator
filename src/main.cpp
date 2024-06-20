@@ -18,18 +18,18 @@ std::atomic<bool> batman(false); // Use atomic for thread-safe boolean
 std::atomic<bool> joker(false); // Use atomic for thread-safe boolean
 
 // Function to control the UDPserver
-std::string udp_server(boost::asio::io_context& io_context,
-                       std::unique_ptr<std::thread>& io_thread,
-                       std::unique_ptr<UDPServer>& server,
-                       std::string command,
-                       SharedVector& sharedVec) {
+std::string udp_server(boost::asio::io_context &io_context,
+                       std::unique_ptr<std::thread> &io_thread,
+                       std::unique_ptr<UDPServer> &server,
+                       const std::string &command,
+                       SharedVector &sharedVec) {
     std::string returner;
 
     if (command == "start") {
         if (!batman.load()) {
             batman.store(true);
             // Create a new server instance and run it in a separate thread
-            server = std::make_unique<UDPServer>(io_context, 3040,sharedVec);
+            server = std::make_unique<UDPServer>(io_context, 3040, sharedVec);
 
             io_thread = std::make_unique<std::thread>([&io_context]() {
                 io_context.run();
@@ -53,7 +53,7 @@ std::string udp_server(boost::asio::io_context& io_context,
         } else {
             returner = "Server is not running.";
         }
-    }else if (command == "exit") {
+    } else if (command == "exit") {
         if (batman.load()) {
             batman.store(false);
             io_context.stop();
@@ -69,19 +69,19 @@ std::string udp_server(boost::asio::io_context& io_context,
 }
 
 // Function to control the TCPserver
-std::string tcp_control(boost::asio::io_context& io_context,
-                        std::unique_ptr<std::thread>& io_thread,
-                        std::unique_ptr<TCPServer>& server,
-                        const std::string& command,Commander& cmd,
-                        SharedVector& sharedVec,
-                        SharedVector& clientVec) {
+std::string tcp_control(boost::asio::io_context &io_context,
+                        std::unique_ptr<std::thread> &io_thread,
+                        std::unique_ptr<TCPServer> &server,
+                        const std::string &command, Commander &cmd,
+                        SharedVector &sharedVec,
+                        SharedVector &clientVec) {
     std::string returner;
 
     if (command == "start") {
         if (!joker.load()) {
             joker.store(true);
             // Create a new TCP server instance and run it in a separate thread
-            server = std::make_unique<TCPServer>(io_context, 1234, cmd, sharedVec,clientVec);
+            server = std::make_unique<TCPServer>(io_context, 1234, cmd, sharedVec, clientVec);
 
             io_thread = std::make_unique<std::thread>([&io_context]() {
                 io_context.run();
@@ -105,7 +105,7 @@ std::string tcp_control(boost::asio::io_context& io_context,
         } else {
             returner = "TCP Server is not running.";
         }
-    }else if (command == "exit") {
+    } else if (command == "exit") {
         if (joker.load()) {
             joker.store(false);
             io_context.stop();
@@ -126,6 +126,7 @@ int main() {
     //things needed to start and stop the UDPServer
     SharedVector sharedVec;
     SharedVector clientVec;
+    initializeSharedVector(clientVec, {});
     boost::asio::io_context udpcontext;
     boost::asio::io_context tcpcontext;
     boost::asio::io_service io_service;
@@ -140,7 +141,7 @@ int main() {
 
     // Add firmware commands and their responses
     commander.addCommand("++addr", "14", 2);
-    commander.addCommand("++reset","",0);
+    commander.addCommand("++reset", "", 0);
     commander.addCommand("++ver", "1.3.4", 0);
     commander.addCommand("++mode", "0", 1);
     commander.addCommand("++auto", "0", 1);
@@ -156,33 +157,35 @@ int main() {
     commander.addCommand("++srq", "0", 1);
     commander.addCommand("++status", "0", 1);
     //Add PSU350 Commands
-    commander.addCommand("HVON", "0",1);
-    commander.addCommand("HVOF", "0",1);
-    commander.addCommand("VOUT?","0",1);
+    commander.addCommand("HVON", "0", 1);
+    commander.addCommand("HVOF", "0", 1);
+    commander.addCommand("VOUT?", "0", 1);
     commander.addCommand("VSET", "0", 1);
+
     // ----------------------------------------------------------------------
     auto udpStart = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver,"start",sharedVec));
+        sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver, "start", sharedVec));
     };
 
     auto udpStop = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver,"stop",sharedVec));
+        sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver, "stop", sharedVec));
     };
     auto tcpStart = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"start",commander,sharedVec,clientVec));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver, "start", commander, sharedVec,
+                                            clientVec));
     };
 
     auto tcpStop = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"stop",commander,sharedVec,clientVec));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver, "stop", commander, sharedVec, clientVec));
     };
     auto Exit = [&] {
         std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
-        sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver,"exit",sharedVec));
-        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver,"exit",commander,sharedVec,clientVec));
+        sharedVec.vec.push_back(udp_server(udpcontext, udpthread, udpserver, "exit", sharedVec));
+        sharedVec.vec.push_back(tcp_control(tcpcontext, tcpthread, tcpserver, "exit", commander, sharedVec, clientVec));
         running = false;
         screen.Exit();
     };
@@ -190,18 +193,19 @@ int main() {
     // -- client list
     // ----------------------------------------------------------------------
     std::array<bool, 10> states;
+    auto lister = Renderer([&] {
+        auto checkboxes = Container::Vertical({});
+        Elements children = {};
 
-    auto checkboxes = Container::Vertical({});
-    for (int i = 0; i < clientVec.vec.size(); ++i) {
-        states[i] = false;
-        checkboxes->Add(Checkbox(clientVec.vec[i], &states[i]) );
-    }
-    Component checkframe = Renderer(checkboxes, [&] {
-        return checkboxes->Render() | vscroll_indicator | frame |
-        size(HEIGHT, LESS_THAN, 5) | border | color(Color::Default);
+        for (size_t i = std::max(0, (int) clientVec.vec.size() - 9); i < clientVec.vec.size(); ++i) {
+            std::lock_guard<std::mutex> lock(clientVec.vecMutex);
+            children.push_back(text(clientVec.vec[i]));
+            checkboxes->Add(Checkbox(clientVec.vec[i], &states[i]));
+        };
+        return vbox(checkboxes) | size(HEIGHT, EQUAL, 3);
     });
 
-    checkboxes=Wrap("To be Done",checkboxes);
+    lister = Wrap("Clients", lister);
 
 
     // -- CLI -----------------------------------------------------------------
@@ -225,28 +229,28 @@ int main() {
         sharedVec.vec.push_back(cli_add_content);
         cli_add_content = "";
     };
-    Component cli_add = Input(&cli_add_content,"commands...",cli_options);
+    Component cli_add = Input(&cli_add_content, "commands...", cli_options);
 
 
-    auto cliArea = Renderer(cli_add,[&] {
-        return window(text("cli input"),vbox(cli_add->Render())) | color(Color::Purple4);
+    auto cliArea = Renderer(cli_add, [&] {
+        return window(text("cli input"), vbox(cli_add->Render())) | color(Color::Purple4);
     }) | size(HEIGHT, EQUAL, 1);
 
     // -- UDP Buttons -----------------------------------------------------------------
 
     auto udpbuttons = Container::Horizontal({
-        Button("Start", udpStart) | center | color(Color::Green), // turn udp on
-        Button("Stop", udpStop) | center | color(Color::Red), // turn udp off
-    }) | size(HEIGHT, EQUAL, 3);
-    udpbuttons = Wrap("UDP Discovery",udpbuttons);
+                          Button("Start", udpStart) | center | color(Color::Green), // turn udp on
+                          Button("Stop", udpStop) | center | color(Color::Red), // turn udp off
+                      }) | size(HEIGHT, EQUAL, 3);
+    udpbuttons = Wrap("UDP Discovery", udpbuttons);
     // -- TCP Buttons -----------------------------------------------------------------
 
     auto tcpbuttons = Container::Horizontal({
-        Button("Start", tcpStart) | center | color(Color::Green), // turn udp on
-        Button("Stop", tcpStop) | center | color(Color::Red), // turn udp off
-        Button("Exit", Exit) | center | color(Color::DarkRed),
-    }) | size(HEIGHT, EQUAL, 5) ;
-    tcpbuttons = Wrap("TCP Server",tcpbuttons);
+                          Button("Start", tcpStart) | center | color(Color::Green), // turn udp on
+                          Button("Stop", tcpStop) | center | color(Color::Red), // turn udp off
+                          Button("Exit", Exit) | center | color(Color::DarkRed),
+                      }) | size(HEIGHT, EQUAL, 5);
+    tcpbuttons = Wrap("TCP Server", tcpbuttons);
 
     // -- Output -----------------------------------------------------------------
 
@@ -255,17 +259,17 @@ int main() {
             text("Server status, connections and outputs are printed here."),
             separator() | color(Color::Yellow),
         };
-        for (size_t i = std::max(0, (int)sharedVec.vec.size() - 9); i < sharedVec.vec.size(); ++i) {
+        for (size_t i = std::max(0, (int) sharedVec.vec.size() - 9); i < sharedVec.vec.size(); ++i) {
             std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
             children.push_back(text(sharedVec.vec[i]));
         }
-        return window(text("Output"), vbox(children) | color(Color::Yellow4) | flex ) | color(Color::Yellow4);
+        return window(text("Output"), vbox(children) | color(Color::Yellow4) | xflex | yflex) | color(Color::Yellow4);
     });
 
 
     // -- Layout -----------------------------------------------------------------
     auto layout = Container::Vertical({
-        checkboxes,
+        lister,
         input_add,
         udpbuttons,
         tcpbuttons
@@ -273,13 +277,12 @@ int main() {
 
     auto component = Renderer(layout, [&] {
         return vbox({
-            checkboxes->Render(),
-            separator() | color(Color::Default),
-            udpbuttons->Render(),
-            separator() | color(Color::Default),
-            tcpbuttons->Render()
-        }) | size(WIDTH, GREATER_THAN, 30) |size(HEIGHT,EQUAL,10)| borderStyled(ROUNDED,Color::Default);
-
+                   lister->Render() | vscroll_indicator,
+                   separator() | color(Color::Default),
+                   udpbuttons->Render(),
+                   separator() | color(Color::Default),
+                   tcpbuttons->Render()
+               }) | size(WIDTH, GREATER_THAN, 30) | size(HEIGHT, EQUAL, 10) | borderStyled(ROUNDED, Color::Default);
     });
 
     auto topwindows = Container::Horizontal({
@@ -288,19 +291,19 @@ int main() {
     });
 
     auto layoutmain = Container::Vertical({
-        topwindows ,
+        topwindows,
         cliArea | flex,
     });
 
 
     auto renderer = Renderer(layoutmain, [&] {
-        return layoutmain->Render() ;
+        return layoutmain->Render();
     }); //main render for the entire interface.
 
     //create a new thread to run the output continously/force redraw. Required for the output window to update on it's own instead of waiting for an event.
 
-    auto screenRedraw = std::thread([&](){
-        while(running){
+    auto screenRedraw = std::thread([&]() {
+        while (running) {
             screen.PostEvent(ftxui::Event::Custom);
             std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Prevent High CPU Usage.
         }

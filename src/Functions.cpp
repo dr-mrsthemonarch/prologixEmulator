@@ -274,20 +274,37 @@ std::vector<boost::asio::ip::address> get_local_interfaces() {
 #endif
 
 // Function to check if the vector has a new entry
-void checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,Elements children) {
+std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,Elements children) {
     std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
     if (sharedVec.vec.size() > lastSize) {
         lastSize = sharedVec.vec.size();
-        //return sharedVec.vec.back();
+        return sharedVec.vec.back();
         }
     }
+
+// Function to check if the vector has a new entry
+std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize) {
+    std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
+    if (sharedVec.vec.size() > lastSize) {
+        lastSize = sharedVec.vec.size();
+        return sharedVec.vec.back();
+    }
+}
 
 // Function to monitor the vector for new entries
 void monitorVector(SharedVector& sharedVec,Elements children) {
     size_t lastSize = 0;
     while (true) {
         checkForNewEntry(sharedVec, lastSize,children);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Sleep for 100 ms before next check
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Sleep for 100 ms before next check
+    }
+}
+// Function to monitor the vector for new entries
+void monitorVector(SharedVector& sharedVec) {
+    size_t lastSize = 0;
+    while (true) {
+        checkForNewEntry(sharedVec, lastSize);
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Sleep for 100 ms before next check
     }
 }
 
@@ -326,6 +343,11 @@ std::string removeWhitespaces(std::string& input) {
 
     // Return the modified string
     return input;
+}
+
+void initializeSharedVector(SharedVector& sharedVec, std::initializer_list<std::string> initList) {
+    std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
+    sharedVec.vec = initList;
 }
 
 //==============================================================================================================================

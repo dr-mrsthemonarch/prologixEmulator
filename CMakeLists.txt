@@ -48,6 +48,8 @@ set(HEADERS
         src/TCPServer.h
         src/TCPSession.h
         src/UDPServer.h
+        src/ClientList.cpp
+        src/ClientList.h
 )
 
 # Add executable

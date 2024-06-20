@@ -22,6 +22,8 @@ struct SharedVector {
     std::mutex vecMutex;
 };
 
+void initializeSharedVector(SharedVector& sharedVec, std::initializer_list<std::string> initList);
+
 boost::asio::ip::address_v6 sinaddr_to_asio(sockaddr_in6 *addr);
 
 std::string addresses_to_string(const std::vector<boost::asio::ip::address>& addresses);
@@ -54,9 +56,11 @@ std::string joinStringsAccumulate(std::vector<std::string>&& strings);
 std::string joinStringsStream(const std::vector<std::string>& strings);
 std::string joinStringsStream(std::vector<std::string>&& strings) ;
 
-void checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,ftxui::Elements children);
+std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize,ftxui::Elements children);
+std::string checkForNewEntry(SharedVector& sharedVec, unsigned long& lastSize);
 
 void monitorVector(SharedVector& sharedVec,ftxui::Elements children);
+void monitorVector(SharedVector& sharedVec);
 
 std::string cleanStringAndGetNumber(std::string& input, std::string& number);
 
