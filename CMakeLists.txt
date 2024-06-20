@@ -4,7 +4,7 @@ project(prologix_emulator LANGUAGES CXX VERSION 1.0.0)
 
 # Specify the C++ compiler based on platform
 if(NOT CMAKE_CXX_COMPILER)
-    if(WIN32)
+    if(x64)
         # For Windows, set appropriate compiler and platform
         if(CMAKE_SIZEOF_VOID_P EQUAL 8)
             # 64-bit Windows (assuming MinGW 64-bit)
