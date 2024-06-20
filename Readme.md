@@ -70,6 +70,8 @@ If you have a nonsense IDE like Xcode, which I used to use until some days ago a
 Otherwise, using cmake is really the way to go, since you don't need anything except commandline...
 Download the source, and compile using the following commands, assuming you're going the cmake route.
 
+**_This currently only works on macOS, I have yet to compile successfully on windows!_**
+
 ```
 mkdir build && cd build
 cmake ..
