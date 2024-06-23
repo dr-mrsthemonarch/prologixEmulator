@@ -132,7 +132,7 @@ int main() {
     //things needed to start and stop the UDPServer
     SharedVector sharedVec;
     SharedVector clientVec;
-    initializeSharedVector(clientVec, {});
+    initializeSharedVector(clientVec, {}); // start the vector empty for the program doesn't crash
     boost::asio::io_context udpcontext;
     boost::asio::io_context tcpcontext;
     boost::asio::io_service io_service;
@@ -199,20 +199,17 @@ int main() {
     // -- client list
     // ----------------------------------------------------------------------
     std::array<bool, 10> states;
-    auto lister = Renderer([&] {
-        auto checkboxes = Container::Vertical({});
-        Elements children = {};
 
-        for (size_t i = std::max(0, (int) clientVec.vec.size() - 9); i < clientVec.vec.size(); ++i) {
+    auto lister = Renderer([&] {
+        Component clist = Container::Vertical({});
+    for (size_t i = std::max(0, (int) clientVec.vec.size() - 9); i < clientVec.vec.size(); ++i) {
             std::lock_guard<std::mutex> lock(clientVec.vecMutex);
-            children.push_back(text(clientVec.vec[i]));
-            checkboxes->Add(Checkbox(clientVec.vec[i], &states[i]));
+            clist ->Add(Checkbox(clientVec.vec[i], &states[i]));
         };
-        return vbox(checkboxes) | size(HEIGHT, EQUAL, 3);
+        return clist->Render() | size(HEIGHT, EQUAL, 3) | vscroll_indicator ;
     });
 
     lister = Wrap("Clients", lister);
-
 
     // -- CLI -----------------------------------------------------------------
 

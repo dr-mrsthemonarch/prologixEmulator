@@ -441,3 +441,15 @@ endif()
 if(NOT TARGET ftxui::screen OR NOT TARGET ftxui::dom)
     message(FATAL_ERROR "FTXUI libraries not found!")
 endif()
+
+
+Component input_list = Container::Vertical({});
+std::vector<std::string> items(100, "");
+for (size_t i = 0; i < items.size(); ++i) {
+    input_list->Add(Input(&(items[i]), "placeholder " + std::to_string(i)));
+}
+
+auto renderer = Renderer(input_list, [&] {
+  return input_list->Render() | vscroll_indicator | frame | border |
+         size(HEIGHT, LESS_THAN, 10);
+});
