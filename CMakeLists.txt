@@ -101,6 +101,6 @@ if(NOT TARGET Boost::asio )
 endif()
 
 # Ensure FTXUI is properly found
-if(NOT TARGET ftxui::screen OR NOT TARGET ftxui::dom)
+if(NOT TARGET ftxui::component OR NOT TARGET ftxui::screen OR NOT TARGET ftxui::dom)
     message(FATAL_ERROR "FTXUI libraries not found!")
 endif()

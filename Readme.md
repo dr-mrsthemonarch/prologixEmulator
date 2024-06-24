@@ -2,7 +2,7 @@
 Turn any computer into a Prologix Ethernet Emulator.
 ![alt text](https://github.com/dr-mrsthemonarch/prologixEmulator/blob/main/images/preview.png?raw=true)
 
-## Current Version 0.3
+## Current Version 0.45
 
 ## What is this?
 This is my retro style prologix emulator.
@@ -25,15 +25,15 @@ It's currently a bit bare bones, all i've done so far are:
 
 ## To Do/Bugfixing:
 - ~~Dynamically display connected clients~~
-  - Fix interactivity of clients
+  - Fix interactivity of clients, scroller
 - Add localhost client to cli input for testing the server and commands and expected responses within the server itself.
-- change static and dynamic ips via Netfinder
 - Fix the Discovery packet structure to properly display uptime, actual mac address and some other things.
 - There is an odd segfault when clicking udp or tcp start and stop buttons too often.
 - Add a "devices" dropdown menu for various emulated GPIB devices.
     - Stanford PSU 350/1
 
 ### Firmware to implement
+- change static and dynamic ips via Netfinder
 - Remaining commands:
     - clr
     - read
@@ -68,10 +68,10 @@ cd ../binary
 ./prologix_emulator
 
 ```
-If you just compile the executable to use and never want to recompile again, you can delete everything in the source afterwards
+If you just compile the executable to use and never want to recompile again, you can delete everything in the source afterwards.
 
 ## FAQ
 ### Does the cli Interface do anything?
-  - Nope! Not yet, the idea is to send commands locally to the server itself. This was mostly a debugging feature in the past, and will likely disappear in the future.
+  - Nope! Not yet, the idea is to send commands locally to the server itself. This was mostly a debugging feature in the past, and will likely disappear in the future, though it will may become a way to talk to the client from the server.
 ### Cmake fails when trying to fetch
   - This I've had happen several times due to the lack of connecting to github, it may be your work network blocking that traffic, or something weird with the internet, but has nothing to do with the project.
