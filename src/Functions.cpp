@@ -21,7 +21,7 @@ Component Wrap(std::string name, Component component) {
         return hbox({
             text(name) | size(WIDTH, EQUAL, 15),
             separator() |  color(Color::Default),
-            component->Render() | xflex ,
+            component->Render() | xflex |vscroll_indicator ,
         });
     });
 }

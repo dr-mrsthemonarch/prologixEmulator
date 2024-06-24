@@ -200,14 +200,23 @@ int main() {
     // ----------------------------------------------------------------------
     std::array<bool, 10> states;
 
+    // auto lister = Renderer([&] {
+    //     Component clist = Container::Vertical({});
+    // for (size_t i = std::max(0, (int) clientVec.vec.size() - 9); i < clientVec.vec.size(); ++i) {
+    //         std::lock_guard<std::mutex> lock(clientVec.vecMutex);
+    //         clist ->Add(Checkbox(clientVec.vec[i], &states[i]));
+    //     };
+    //     return clist->Render() | size(HEIGHT, EQUAL, 3) | vscroll_indicator ;
+    // });
+
     auto lister = Renderer([&] {
-        Component clist = Container::Vertical({});
+    Elements children = {};
     for (size_t i = std::max(0, (int) clientVec.vec.size() - 9); i < clientVec.vec.size(); ++i) {
-            std::lock_guard<std::mutex> lock(clientVec.vecMutex);
-            clist ->Add(Checkbox(clientVec.vec[i], &states[i]));
-        };
-        return clist->Render() | size(HEIGHT, EQUAL, 3) | vscroll_indicator ;
-    });
+        std::lock_guard<std::mutex> lock(clientVec.vecMutex);
+        children.push_back(text(clientVec.vec[i]));
+    }
+    return  vbox(children) | size(HEIGHT, EQUAL, 3);
+});
 
     lister = Wrap("Clients", lister);
 
