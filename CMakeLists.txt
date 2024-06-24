@@ -26,7 +26,7 @@ if(NOT CMAKE_CXX_COMPILER)
 endif()
 
 # Boost
-set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options asio date_time)
+set(BOOST_INCLUDE_LIBRARIES asio )
 set(BOOST_ENABLE_CMAKE ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../binary)
 include(FetchContent)
@@ -88,10 +88,6 @@ target_link_libraries(prologix_emulator
 # Link Boost libraries
 target_link_libraries(prologix_emulator
         PRIVATE Boost::asio
-        PRIVATE Boost::filesystem
-        PRIVATE Boost::thread
-        PRIVATE Boost::program_options
-        PRIVATE Boost::system
 )
 
 # Set C++ standard
@@ -100,7 +96,7 @@ if(CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 # Ensure Boost is properly found
-if(NOT TARGET Boost::asio OR NOT TARGET Boost::filesystem OR NOT TARGET Boost::thread OR NOT TARGET Boost::program_options)
+if(NOT TARGET Boost::asio )
     message(FATAL_ERROR "Required Boost libraries not found!")
 endif()
 

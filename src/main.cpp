@@ -200,7 +200,7 @@ int main() {
     // ----------------------------------------------------------------------
     std::array<bool, 10> states;
 
-    // auto lister = Renderer([&] {
+    // auto lister = Renderer([&] { //for dynamic checkboxes...however causes segfaults and the checkboxes have no interactions, maybe fixed within tuitodo.
     //     Component clist = Container::Vertical({});
     // for (size_t i = std::max(0, (int) clientVec.vec.size() - 9); i < clientVec.vec.size(); ++i) {
     //         std::lock_guard<std::mutex> lock(clientVec.vecMutex);
