@@ -41,8 +41,8 @@ private:
     class TableRow : public ftxui::ComponentBase {
     public:
         TableRow(int index, std::vector<Order>* bids, std::vector<Order>* asks);
-        ftxui::Element Render() final;
-        bool Focusable() const final;
+        ftxui::Element Render() ;
+        bool Focusable() const ;
 
     private:
         int index_;

@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libboost_context.a CMakeFiles/boost_context.dir/src/asm/make_arm64_aapcs_macho_gas.S.o CMakeFiles/boost_context.dir/src/asm/jump_arm64_aapcs_macho_gas.S.o CMakeFiles/boost_context.dir/src/asm/ontop_arm64_aapcs_macho_gas.S.o CMakeFiles/boost_context.dir/src/posix/stack_traits.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libboost_context.a

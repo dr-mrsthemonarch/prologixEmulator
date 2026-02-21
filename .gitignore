@@ -35,3 +35,4 @@
 # Directories
 cmake-build-debug/
 bin/
+_deps/

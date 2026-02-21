@@ -28,7 +28,7 @@ endif()
 # Boost
 set(BOOST_INCLUDE_LIBRARIES asio )
 set(BOOST_ENABLE_CMAKE ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../binary)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binary)
 include(FetchContent)
 
 FetchContent_Declare(

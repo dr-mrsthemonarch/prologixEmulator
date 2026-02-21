@@ -1,0 +1,3 @@
+/Users/morbo/CLionProjects/prologix_emulator/_deps/ftxui-subbuild/CMakeFiles/ftxui-populate.dir
+/Users/morbo/CLionProjects/prologix_emulator/_deps/ftxui-subbuild/CMakeFiles/edit_cache.dir
+/Users/morbo/CLionProjects/prologix_emulator/_deps/ftxui-subbuild/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/CMakeFiles/boost-populate"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/CMakeFiles/boost-populate.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/CMakeFiles/boost-populate-complete.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-build.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-configure.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-download.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-install.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-mkdir.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-patch.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-test.rule"
+		},
+		{
+			"file" : "/Users/morbo/CLionProjects/prologix_emulator/_deps/boost-subbuild/boost-populate-prefix/src/boost-populate-stamp/boost-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"boost-populate"
+		],
+		"name" : "boost-populate"
+	}
+}
