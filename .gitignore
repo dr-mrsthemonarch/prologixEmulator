@@ -36,3 +36,8 @@
 cmake-build-debug/
 bin/
 _deps/
+CMakeFiles
+*.cmake
+Makefile
+*.json
+CMakeCache.txt
