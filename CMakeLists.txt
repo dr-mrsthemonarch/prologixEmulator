@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(prologix_emulator LANGUAGES CXX VERSION 1.0.0)
+project(prologix_emulator  VERSION 0.5 LANGUAGES CXX)
 
 # Specify the C++ compiler based on platform
 if(NOT CMAKE_CXX_COMPILER)

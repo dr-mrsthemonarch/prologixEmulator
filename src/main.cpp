@@ -146,6 +146,7 @@ int main() {
     Commander commander(sharedVec);
 
     // Add firmware commands and their responses
+    commander.addCommand("idn?", "GBIP Emulator", 1);
     commander.addCommand("++addr", "14", 2);
     commander.addCommand("++reset", "", 0);
     commander.addCommand("++ver", "1.3.4", 0);
