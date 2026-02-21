@@ -9,6 +9,7 @@
 #define Functions_hpp
 
 #include <boost/asio.hpp>
+#include <atomic>
 #include <boost/bind/bind.hpp>
 #include <sstream>
 #include <cstring>
@@ -21,6 +22,9 @@ struct SharedVector {
     std::vector<std::string> vec;
     std::mutex vecMutex;
 };
+
+// Global polarity flag: true = positive output, false = negative output
+extern std::atomic<bool> polarity_positive;
 
 void initializeSharedVector(SharedVector& sharedVec, std::initializer_list<std::string> initList);
 

@@ -7,6 +7,31 @@
 
 #include "Responder.h"
 
+// Set of commands whose numeric responses are subject to polarity
+static const std::unordered_set<std::string> polarity_commands = {
+    "VOUT?", "VSET", "HVON", "HVOF"
+};
+
+static std::string applyPolarity(const std::string& commandName, const std::string& response) {
+    if (polarity_commands.find(commandName) == polarity_commands.end()) return response;
+    try {
+        double val = std::stod(response);
+        double abs_val = std::abs(val);
+        if (polarity_positive.load()) {
+            // preserve integer formatting
+            if (response.find('.') == std::string::npos)
+                return "+" + std::to_string(static_cast<long long>(abs_val));
+            return "+" + std::to_string(abs_val);
+        } else {
+            if (response.find('.') == std::string::npos)
+                return "-" + std::to_string(static_cast<long long>(abs_val));
+            return "-" + std::to_string(abs_val);
+        }
+    } catch (...) {
+        return response;
+    }
+}
+
 
 std::string Responder::getResponse(Commander& commander, const std::string& commandName, const std::vector<std::string>& params) {
     if (commandName == "++reset") {
@@ -42,5 +67,5 @@ std::string Responder::getResponse(Commander& commander, const std::string& comm
         }
     }
 
-    return response;
+    return applyPolarity(commandName, response);
 };

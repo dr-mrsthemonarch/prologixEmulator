@@ -22,6 +22,7 @@ using boost::asio::ip::udp;
 using namespace ftxui;
 std::atomic<bool> batman(false); // Use atomic for thread-safe boolean
 std::atomic<bool> joker(false); // Use atomic for thread-safe boolean
+std::atomic<bool> polarity_positive(true); // true = positive, false = negative
 
 // Function to control the UDPserver
 std::string udp_server(boost::asio::io_context &io_context,
@@ -258,12 +259,31 @@ int main() {
     udpbuttons = Wrap("UDP Discovery", udpbuttons);
     // -- TCP Buttons -----------------------------------------------------------------
 
-    auto tcpbuttons = Container::Horizontal({
-                          Button("Start", tcpStart) | center | color(Color::Green), // turn udp on
-                          Button("Stop", tcpStop) | center | color(Color::Red), // turn udp off
-                          Button("Exit", Exit) | center | color(Color::DarkRed),
-                      }) | size(HEIGHT, EQUAL, 5);
-    tcpbuttons = Wrap("TCP Server", tcpbuttons);
+    auto tcpButtonsRow = Container::Horizontal({
+        Button("Start", tcpStart) | center | color(Color::Green),
+        Button("Stop", tcpStop) | center | color(Color::Red),
+        Button("Exit", Exit) | center | color(Color::DarkRed),
+    }) | size(HEIGHT, EQUAL, 5);
+    tcpButtonsRow = Wrap("TCP Server", tcpButtonsRow);
+
+    // -- Polarity Button ---------------------------------------------------------
+
+    auto polarityButton = Button("Toggle", [&] {
+        polarity_positive.store(!polarity_positive.load());
+    });
+
+    auto polarityRow = Renderer(polarityButton, [&] {
+        auto polLabel = polarity_positive.load() ? " Polarity: + " : " Polarity: - ";
+        auto polColor = polarity_positive.load() ? Color::Green : Color::Red;
+        return hbox({
+            text("Output Polarity") | size(WIDTH, EQUAL, 15),
+            separator() | color(Color::Default),
+            hbox({
+                polarityButton->Render(),
+                text(polLabel) | color(polColor) | vcenter,
+            }) | xflex,
+        });
+    });
 
     // -- Output -----------------------------------------------------------------
 
@@ -276,7 +296,7 @@ int main() {
             std::lock_guard<std::mutex> lock(sharedVec.vecMutex);
             children.push_back(text(sharedVec.vec[i]));
         }
-        return window(text("Output"), vbox(children) | color(Color::Yellow4) | xflex | yflex) | color(Color::Yellow4);
+        return window(text("Output"), vbox(children) | color(Color::Yellow4) | xflex) | color(Color::Yellow4);
     });
 
 
@@ -285,7 +305,8 @@ int main() {
         lister,
         input_add,
         udpbuttons,
-        tcpbuttons
+        tcpButtonsRow,
+        polarityButton,
     });
 
     auto component = Renderer(layout, [&] {
@@ -294,8 +315,10 @@ int main() {
                    separator() | color(Color::Default),
                    udpbuttons->Render(),
                    separator() | color(Color::Default),
-                   tcpbuttons->Render()
-               }) | size(WIDTH, GREATER_THAN, 30) | size(HEIGHT, EQUAL, 10) | borderStyled(ROUNDED, Color::Default);
+                   tcpButtonsRow->Render(),
+                   separator() | color(Color::Default),
+                   polarityRow->Render()
+               }) | size(WIDTH, GREATER_THAN, 30) | size(HEIGHT, EQUAL, 17) | borderStyled(ROUNDED, Color::Default);
     });
 
     auto topwindows = Container::Horizontal({

@@ -224,14 +224,14 @@ std::vector<boost::asio::ip::address> get_local_interfaces() {
             if (addr->Ipv4Enabled) {
                 for (Addr *uaddr = addr->FirstUnicastAddress; uaddr != 0; uaddr = uaddr->Next) {
                     if (uaddr->Address.lpSockaddr->sa_family != AF_INET) continue;
-                    res.push_back(boost::asio::ip::make_address_v4(ntohl(reinterpret_cast<sockaddr_in *>(addr->ifa_addr)->sin_addr.s_addr)));
+                    res.push_back(boost::asio::ip::make_address_v4(ntohl(reinterpret_cast<sockaddr_in *>(uaddr->Address.lpSockaddr)->sin_addr.s_addr)));
                 }
             }
 
             if (addr->Ipv6Enabled) {
                 for (Addr *uaddr = addr->FirstUnicastAddress; uaddr != 0; uaddr = uaddr->Next) {
                     if (uaddr->Address.lpSockaddr->sa_family != AF_INET6) continue;
-                    res.push_back(sinaddr_to_asio(reinterpret_cast<sockaddr_in6 *>(addr->ifa_addr)));
+                    res.push_back(sinaddr_to_asio(reinterpret_cast<sockaddr_in6 *>(uaddr->Address.lpSockaddr)));
                 }
             }
         }

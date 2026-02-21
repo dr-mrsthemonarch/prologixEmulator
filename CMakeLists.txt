@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.26)
 
 project(prologix_emulator  VERSION 0.5 LANGUAGES CXX)
 
+# Define Windows target version globally (Windows 10)
+if(WIN32)
+    add_definitions(-D_WIN32_WINNT=0x0A00)
+    add_definitions(-DWIN32_LEAN_AND_MEAN)
+endif()
+
 # Specify the C++ compiler based on platform
 if(NOT CMAKE_CXX_COMPILER)
     if(x64)
@@ -28,7 +34,7 @@ endif()
 # Boost
 set(BOOST_INCLUDE_LIBRARIES asio )
 set(BOOST_ENABLE_CMAKE ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binary)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../binary)
 include(FetchContent)
 
 FetchContent_Declare(

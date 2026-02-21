@@ -8,6 +8,7 @@
 #ifndef Responder_hpp
 #define Responder_hpp
 
+#include <unordered_set>
 #include "Functions.h"
 #include "Commander.h"
 
